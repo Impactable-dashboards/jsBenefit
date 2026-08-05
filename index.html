@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS Benefits Group · Intelligence Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+/* ============================
+   TOKENS
+   ============================ */
+:root{
+  --asphalt:#0A0A0C;--concrete:#15151A;--court:#22222A;--bone:#F4F1EA;--chalk:#D8D4C8;
+  --navy:#0D2D5E;--navy-deep:#071A38;--blue:#1B9BD1;--blue-soft:#5BB8E0;
+  --canopy:#D4FF3D;--moss:#7BAA3E;--terracotta:#C4521F;--hazard:#FF5A1F;--clay:#FFB627;--jet-pink:#FF2D7A;
+  --bg:var(--asphalt);--surface:var(--concrete);--line:var(--court);--ink:var(--bone);--muted:#9a9788;--card:#15151A;
+  --canopy-text:#D4FF3D;
+}
+[data-theme="light"]{
+  --bg:#F4F1EA;--surface:#FBFAF6;--line:#E0DCCF;--ink:#161512;--muted:#6b6659;--card:#FFFFFF;--chalk:#4a463c;
+  --canopy-text:#5C7200;
+}
+
+/* ============================
+   BASE
+   ============================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:44px 28px 100px}
+
+/* ============================
+   NAV
+   ============================ */
+.nav{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1120px;margin:0 auto;padding:11px 28px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.brand{font-family:'JetBrains Mono';font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--muted);white-space:nowrap;margin-right:4px}
+.brand .imp{color:var(--canopy-text)}.brand .sep{opacity:.4;margin:0 4px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.tab{background:none;border:1px solid transparent;color:var(--muted);font-family:'JetBrains Mono';font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:7px 13px;border-radius:7px;cursor:pointer;transition:all .18s;white-space:nowrap}
+.tab:hover{color:var(--ink);border-color:var(--line)}
+.tab.active{color:var(--asphalt);background:var(--canopy);font-weight:700;border-color:transparent}
+.theme-btn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:7px;width:34px;height:32px;cursor:pointer;font-size:14px;flex-shrink:0;transition:border-color .18s}
+.theme-btn:hover{border-color:var(--ink)}
+.nav-cta{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:8px 14px;border-radius:7px;background:var(--blue);color:#fff;white-space:nowrap;transition:background .18s}
+.nav-cta:hover{background:var(--blue-soft)}
+
+/* ============================
+   VIEWS
+   ============================ */
+.view{display:none}.view.active{display:block}
+
+/* ============================
+   TYPOGRAPHY
+   ============================ */
+.kicker{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+h1.big{font-family:'Archivo Black';font-size:clamp(28px,5vw,52px);line-height:1.1;margin-bottom:20px}
+h1.big .b{color:var(--canopy-text);font-style:italic}
+h1.big .o{color:var(--terracotta)}
+.lede{font-size:16px;color:var(--chalk);max-width:780px;margin-bottom:26px;line-height:1.7}
+.editorial{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(16px,2.2vw,22px);color:var(--ink);line-height:1.45;border-left:3px solid var(--canopy);padding-left:20px;margin:28px 0}
+.editorial .em{color:var(--canopy-text)}
+h2.sec{font-family:'Archivo Black';font-size:clamp(18px,2.8vw,26px);margin:40px 0 14px;line-height:1.25}
+h2.sec em{color:var(--canopy-text);font-style:italic}
+h3.sub{font-family:'Archivo Black';font-size:15px;margin:24px 0 8px}
+h3.sub em{color:var(--canopy-text);font-style:italic}
+.metastrip{display:flex;gap:28px;flex-wrap:wrap;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:24px;padding-top:22px;border-top:1px solid var(--line)}
+
+/* ============================
+   LAYOUT HELPERS
+   ============================ */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0}
+
+/* ============================
+   CARDS
+   ============================ */
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:14px;position:relative;overflow:hidden}
+.card.tl{border-top:3px solid var(--canopy)}.card.tb{border-top:3px solid var(--blue)}.card.tt{border-top:3px solid var(--terracotta)}.card.tm{border-top:3px solid var(--moss)}.card.tc{border-top:3px solid var(--clay)}
+.tag{font-family:'JetBrains Mono';font-size:11px;background:color-mix(in srgb,var(--ink) 6%,transparent);border:1px solid var(--line);color:var(--chalk);padding:3px 9px;border-radius:6px;display:inline-block;margin:2px 3px 2px 0}
+.tag.ex{background:color-mix(in srgb,var(--hazard) 10%,transparent);border-color:color-mix(in srgb,var(--hazard) 30%,transparent);color:var(--hazard)}
+.pill{font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;display:inline-block}
+.pill.hi{background:color-mix(in srgb,var(--moss) 18%,transparent);color:var(--moss);border:1px solid color-mix(in srgb,var(--moss) 35%,transparent)}
+.pill.med{background:color-mix(in srgb,var(--clay) 18%,transparent);color:var(--clay);border:1px solid color-mix(in srgb,var(--clay) 35%,transparent)}
+.pill.lo{background:color-mix(in srgb,var(--muted) 12%,transparent);color:var(--muted);border:1px solid var(--line)}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.stat .n{font-family:'Archivo Black';font-size:34px;line-height:1;color:var(--canopy-text)}
+.stat.b .n{color:var(--blue)}.stat.t .n{color:var(--terracotta)}.stat.m .n{color:var(--moss)}
+.stat .l{font-size:12.5px;color:var(--muted);margin-top:6px}
+.why{font-size:13px;color:var(--chalk);border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.why b{color:var(--canopy-text)}.card.tb .why b{color:var(--blue)}.card.tt .why b{color:var(--terracotta)}.card.tm .why b{color:var(--moss)}
+
+/* ============================
+   CALLOUT + BUTTONS
+   ============================ */
+.callout{background:linear-gradient(135deg,color-mix(in srgb,var(--canopy) 7%,transparent),color-mix(in srgb,var(--blue) 5%,transparent));border:1px solid var(--line);border-left:3px solid var(--canopy);border-radius:12px;padding:22px 24px;margin:26px 0}
+.callout .k{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--canopy-text);margin-bottom:8px}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono';font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:11px 20px;border-radius:8px;cursor:pointer;border:none;transition:all .18s;text-decoration:none}
+.btn.primary{background:var(--canopy);color:var(--asphalt)}.btn.primary:hover{background:#c5f01a}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}.btn.ghost:hover{border-color:var(--ink)}
+.dark-panel{--canopy-text:#D4FF3D}
+.dark-panel .btn.ghost{border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.75)}
+.dark-panel .btn.ghost:hover{border-color:rgba(255,255,255,0.6);color:#fff}
+
+/* ============================
+   TABLES
+   ============================ */
+.tbl-wrap{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--chalk);font-size:13.5px}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--ink);font-weight:600}
+
+/* ============================
+   TOGGLE (progressive disclosure)
+   ============================ */
+details{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+summary{padding:13px 18px;cursor:pointer;font-family:'JetBrains Mono';font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--muted);list-style:none;display:flex;align-items:center;gap:8px;user-select:none;transition:color .18s}
+summary::before{content:'+';width:20px;height:20px;border-radius:4px;background:color-mix(in srgb,var(--canopy) 15%,transparent);color:var(--canopy-text);display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;transition:background .18s}
+details[open] summary::before{content:'−'}
+summary:hover{color:var(--ink)}
+details[open] summary{color:var(--ink)}
+.detail-body{padding:16px 18px 20px;border-top:1px solid var(--line)}
+
+/* ============================
+   LADDER (audience efficiency)
+   ============================ */
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.rung{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column}
+.rung.warm{border-top:3px solid var(--moss)}.rung.abm{border-top:3px solid var(--blue)}.rung.cold{border-top:3px solid var(--terracotta)}.rung.extend{border-top:3px solid var(--clay)}
+.rung .rl{font-family:'JetBrains Mono';font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rung .rn{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px}
+.rung .rp{font-family:'JetBrains Mono';font-size:14px;color:var(--canopy-text);margin-bottom:10px}
+.rung.abm .rp{color:var(--blue)}.rung.cold .rp{color:var(--terracotta)}.rung.extend .rp{color:var(--clay)}
+.rung .rd{font-size:12.5px;color:var(--chalk);flex:1}
+
+/* ============================
+   CCC (Create/Connect/Capture)
+   ============================ */
+.ccc{margin:20px 0}
+.ccc .col{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 22px;min-height:280px;display:flex;flex-direction:column}
+.ccc .col.create{border-top:3px solid var(--canopy)}.ccc .col.connect{border-top:3px solid var(--blue)}.ccc .col.capture{border-top:3px solid var(--terracotta)}.ccc .col.extend{border-top:3px solid var(--clay)}.ccc .col.activate{border-top:3px solid var(--moss)}
+.ccc .word{font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.ccc .create .word{color:var(--canopy-text)}.ccc .connect .word{color:var(--blue)}.ccc .capture .word{color:var(--terracotta)}.ccc .extend .word{color:var(--clay)}.ccc .activate .word{color:var(--moss)}
+.ccc .title{font-family:'Archivo Black';font-size:15px;margin-bottom:12px}
+.ccc ul{padding-left:16px;font-size:13px;color:var(--chalk);flex:1}
+.ccc li{margin-bottom:6px}
+
+/* ============================
+   PYRAMID / ECOSYSTEM MATURITY
+   ============================ */
+.pyramid{display:flex;flex-direction:column;gap:2px;margin:28px 0}
+.floor{display:grid;grid-template-columns:200px 1fr;gap:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);position:relative}
+.floor.f1{border-color:var(--terracotta)}
+.floor-meta{padding:20px 22px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;background:var(--surface)}
+.floor-num{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.floor-name{font-family:'Archivo Black';font-size:16px;color:var(--ink);margin-bottom:8px}
+.floor-badge{font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;display:inline-block;width:fit-content}
+.badge-inplace{background:color-mix(in srgb,var(--moss) 18%,transparent);color:var(--moss);border:1px solid color-mix(in srgb,var(--moss) 40%,transparent)}
+.badge-partial{background:color-mix(in srgb,var(--terracotta) 15%,transparent);color:var(--terracotta);border:1px solid color-mix(in srgb,var(--terracotta) 35%,transparent)}
+.badge-gated{background:color-mix(in srgb,var(--muted) 10%,transparent);color:var(--muted);border:1px solid var(--line)}
+.badge-early{background:color-mix(in srgb,var(--canopy) 12%,transparent);color:var(--canopy-text);border:1px solid color-mix(in srgb,var(--canopy) 35%,transparent)}
+.floor-motions{padding:18px 20px;background:var(--card);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.motion-chip{font-family:'JetBrains Mono';font-size:11px;padding:6px 12px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--chalk);white-space:nowrap;transition:all .18s}
+.motion-chip.active-now{background:color-mix(in srgb,var(--canopy) 14%,transparent);border-color:var(--canopy-text);color:var(--ink);font-weight:700}
+.motion-chip.next-move{background:color-mix(in srgb,var(--blue) 14%,transparent);border-color:var(--blue);color:var(--blue);font-weight:700}
+.motion-chip.missing{background:color-mix(in srgb,var(--terracotta) 10%,transparent);border-color:color-mix(in srgb,var(--terracotta) 40%,transparent);color:var(--terracotta)}
+.motion-chip .chip-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-left:5px;padding:1px 5px;border-radius:4px;vertical-align:middle}
+.motion-chip.active-now .chip-label{background:var(--canopy);color:var(--asphalt)}
+.motion-chip.next-move .chip-label{background:var(--blue);color:#fff}
+.gate-row{display:flex;align-items:center;gap:10px;padding:10px 0;margin:0 4px}
+.gate-line{flex:1;height:1px;background:var(--line)}
+.gate-text{font-family:'JetBrains Mono';font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--terracotta);white-space:nowrap}
+.pyramid-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.leg-item{display:flex;align-items:center;gap:6px}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* ============================
+   SIGNAL LAYER
+   ============================ */
+.signal-flow{display:flex;align-items:flex-start;gap:0;margin:24px 0;overflow-x:auto;padding-bottom:8px}
+.sig-pool{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:130px;text-align:center;flex-shrink:0}
+.sig-pool .sp-num{font-family:'JetBrains Mono';font-size:10px;color:var(--canopy-text);letter-spacing:.1em;margin-bottom:4px}
+.sig-pool .sp-name{font-size:12px;font-weight:700;color:var(--ink)}
+.sig-pool .sp-d{font-size:11px;color:var(--muted);margin-top:3px}
+.sig-arrow{display:flex;align-items:center;padding:0 6px;color:var(--muted);font-size:18px;flex-shrink:0}
+.sig-output{background:color-mix(in srgb,var(--blue) 12%,transparent);border:1px solid var(--blue);border-radius:10px;padding:14px 18px;min-width:140px;text-align:center;flex-shrink:0}
+.sig-output .so-label{font-family:'JetBrains Mono';font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:5px}
+.sig-output .so-name{font-size:13px;font-weight:700;color:var(--ink)}
+
+/* ============================
+   PRICING RUNGS
+   ============================ */
+.prung{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:14px;position:relative}
+.prung.rec{border-color:var(--canopy-text);box-shadow:0 0 0 1px var(--canopy)}
+.prung .pr-badge{position:absolute;top:16px;right:16px;font-family:'JetBrains Mono';font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--canopy);color:var(--asphalt);padding:3px 9px;border-radius:20px}
+.prung .pr-tier{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.prung .pr-name{font-family:'Archivo Black';font-size:22px;color:var(--ink);margin-bottom:3px}
+.prung .pr-price{font-size:14px;color:var(--muted);margin-bottom:16px}
+.prung .pr-price strong{color:var(--ink);font-size:16px}
+.prung hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+.prung ul{padding-left:0;list-style:none}
+.prung li{font-size:13px;color:var(--chalk);padding:5px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:flex-start}
+.prung li::before{content:'→';color:var(--muted);flex-shrink:0;margin-top:1px}
+.prung.rec li::before{color:var(--canopy-text)}
+.prung li:last-child{border-bottom:none}
+.prung .pr-cta{display:block;text-align:center;margin-top:18px;padding:12px;border-radius:8px;font-family:'JetBrains Mono';font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:all .18s;text-decoration:none}
+.prung.rec .pr-cta{background:var(--canopy);color:var(--asphalt)}.prung.rec .pr-cta:hover{background:#c5f01a}
+.prung:not(.rec) .pr-cta{background:none;border:1px solid var(--line);color:var(--ink)}.prung:not(.rec) .pr-cta:hover{border-color:var(--ink)}
+.honest-note{background:color-mix(in srgb,var(--muted) 8%,transparent);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:12.5px;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* ============================
+   FOOTER
+   ============================ */
+.foot{border-top:1px solid var(--line);margin-top:60px;padding:28px 0 10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.foot .mp{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:7px 12px}
+.foot .disc{font-size:11.5px;color:var(--muted);max-width:680px}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+@media(max-width:700px){
+  .grid2,.grid3,.ccc,.statrow,.ladder{grid-template-columns:1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+  .tabs{width:100%;order:3}
+  .wrap,.nav-in{padding-left:18px;padding-right:18px}
+  .floor{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .floor-meta{border-right:none;border-bottom:1px solid var(--line)}
+  .signal-flow{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <span class="brand"><span class="imp">IMPACT</span><span class="able">ABLE</span><span class="sep">///</span> Intelligence Room</span>
+  <div class="tabs">
+    <button class="tab active" data-v="overview">Overview</button>
+    <button class="tab" data-v="whitespace">White Space</button>
+    <button class="tab" data-v="targeting">Targeting</button>
+    <button class="tab" data-v="ecosystem">Ecosystem</button>
+    <button class="tab" data-v="howitworks">How It Works</button>
+    <button class="tab" data-v="paths">Paths Forward</button>
+  </div>
+  <button class="theme-btn" id="themeBtn" title="Toggle theme">&#9790;</button>
+  <a class="nav-cta" href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener">Book a call</a>
+</div></nav>
+<div class="wrap">
+
+<!-- ============================================================
+     TAB 1: OVERVIEW
+     ============================================================ -->
+<section class="view active" id="overview">
+  <div class="kicker">Prospect Intelligence &middot; Demand Plan &middot; Prepared for JS Benefits Group</div>
+  <h1 class="big">The proof is there.<br><span class="b">The system to deploy it</span> isn't.</h1>
+  <p class="lede">JS Benefits Group has spent 32 years building what most B2B service firms never build at all: five quantified outcome case studies, direct underwriter access, a 95% retention rate, and a founder whose name closes deals. No competitor in the Mid-Atlantic benefits market has more than one published case study with a dollar figure in it. This room shows where the market white space is, who to target first, and how the demand engine gets built around the proof that already exists.</p>
+  <div class="editorial">Every competitor says "we reduce costs." <span class="em">Nobody else has a $380K captive case study.</span> That is the campaign.</div>
+
+  <div class="statrow">
+    <div class="stat"><div class="n">5</div><div class="l">Quantified case studies published &mdash; competitors average 0</div></div>
+    <div class="stat b"><div class="n">32</div><div class="l">Years of direct underwriter relationships, not broker-rep access</div></div>
+    <div class="stat t"><div class="n">95%</div><div class="l">Stated client retention &mdash; the number no new entrant can fake</div></div>
+    <div class="stat m"><div class="n">0</div><div class="l">Competitors with a published captive case study and a named dollar outcome</div></div>
+  </div>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:11px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:10px">THE STRATEGIC THESIS</div>
+    <div style="font-size:15px;color:var(--chalk);line-height:1.7">The CFOs and HR Directors who need JS Benefits Group are already reading the content. The paid amplification layer that puts Jennifer's proof in front of them 90&nbsp;days before their renewal cycle &mdash; and builds a retargetable audience in the process &mdash; does not exist yet. That is the only gap between current positioning and market leadership in the Mid-Atlantic benefits advisory market.</div>
+  </div>
+
+  <h2 class="sec" style="margin-top:36px">Six sequenced moves. In this order.</h2>
+
+  <div class="card tl" style="margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--canopy);color:var(--asphalt);font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:4px">CREATE &middot; Week 1</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">Jennifer's posts, paid to the right employers</div>
+        <div style="font-size:13px;color:var(--chalk)">Run Jennifer Schaefer's existing LinkedIn content as Thought Leader Ads to CFOs, HR Directors, and business owners. No new creative. The authority she has already built becomes the reach she does not yet have. Primary job: manufacture the warm retargetable pool from cold start.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tb" style="margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue);margin-bottom:4px">CONNECT &middot; Weeks 3&ndash;6</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">Case studies to named accounts and warm visitors</div>
+        <div style="font-size:13px;color:var(--chalk)">Deploy the five case studies as ABM and retarget campaigns. Captive story to 150&ndash;500 employee Mid-Atlantic employers. Negotiation story to renewal-risk CFOs. HDHP bridge to HR Directors. No competitor is running this message with this proof.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tt" style="margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--terracotta);color:#fff;font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--terracotta);margin-bottom:4px">CAPTURE &middot; Week 2 (parallel)</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">Google Search: harvest the demand LinkedIn creates</div>
+        <div style="font-size:13px;color:var(--chalk)">Six high-intent keyword clusters: "switch benefits broker," "self-funded health plan consulting," "employee benefits broker Philadelphia," and brand defense. LinkedIn creates the brand recognition; Google catches the searches it generates.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tb" style="margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--blue-soft);color:var(--navy-deep);font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue-soft);margin-bottom:4px">CONNECT &middot; Weeks 2&ndash;4</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">Warm retarget: pixel pool converts at $75&ndash;$150 CPL</div>
+        <div style="font-size:13px;color:var(--chalk)">Once the LinkedIn Insight Tag fires and the engager pool builds, retarget with the free benefits analysis offer. This is the conversion engine. Cold prospecting feeds it; warm retarget closes it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tm" style="margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--moss);color:#fff;font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--moss);margin-bottom:4px">ACTIVATE &middot; Month 2&ndash;3</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">Signal-triggered outreach: the accounts already leaning in</div>
+        <div style="font-size:13px;color:var(--chalk)">When DemandSense signals show an ABM account at 3+ touchpoints, route to LinkedIn outreach. Multi-touch accounts convert to pipeline at 3x+ single-touch accounts. Outreach arrives as a follow-up, not a cold call.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--clay);margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--clay);color:var(--asphalt);font-family:'Archivo Black';font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">6</div>
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--clay);margin-bottom:4px">INTELLIGENCE &middot; Month 2&ndash;3</div>
+        <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:5px">DemandSense: five signals into one account view</div>
+        <div style="font-size:13px;color:var(--chalk)">CRM data, LinkedIn paid engagement, LinkedIn organic, companies on site, people on site &mdash; composed into one account-level view. Board-grade reporting: influenced pipeline, hidden pipeline, accounts in motion. The layer that turns impressions into conversations.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metastrip">
+    <span>4 competitors profiled</span>
+    <span>5 white space gaps identified</span>
+    <span>3 cold personas mapped</span>
+    <span>14 keyword themes</span>
+    <span>JS Benefits Group &middot; Newtown, PA</span>
+  </div>
+  <div class="btnrow"><a class="btn primary" data-goto="whitespace">See the white space &rarr;</a><a class="btn ghost" href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener">Book a call</a></div>
+</section>
+
+<!-- ============================================================
+     TAB 2: WHITE SPACE
+     ============================================================ -->
+<section class="view" id="whitespace">
+  <div class="kicker">Competitive Analysis &middot; 4 competitors researched</div>
+  <h2 class="sec">Where the market is <em>crowded</em>, and where nobody is.</h2>
+  <p style="font-size:14px;color:var(--chalk);margin-bottom:28px;max-width:700px">OneDigital, Precision Benefits, Exude Inc., and Triton Benefits were researched in full. Every claim below is sourced from public materials. Verified finding: JS Benefits Group is the only firm in this market with quantified, named-strategy case studies. The others have zero to one, with no dollar figures.</p>
+
+  <!-- Saturation -->
+  <h3 class="sub">What every competitor is saying &mdash; <em>saturated territory</em></h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Saturated Message</th><th>Who Says It</th><th>Why It Fails</th></tr></thead>
+      <tbody>
+        <tr><td>"We reduce costs"</td><td>All five firms</td><td>Indistinguishable. A CFO evaluating three brokers sees this claim everywhere. It answers nothing.</td></tr>
+        <tr><td>"We're more than a broker / strategic partner"</td><td>OneDigital, Exude, Precision, JSBG</td><td>Every firm says it. None prove it with dollar figures on named strategies.</td></tr>
+        <tr><td>"30+ carrier relationships / market leverage"</td><td>OneDigital, Triton, JSBG</td><td>Table stakes. Triton claims $300M in premium with zero case studies.</td></tr>
+        <tr><td>"Self-funded / captive / level-funded available"</td><td>All five firms</td><td>Listed as a menu item by all competitors. None have a published captive outcome.</td></tr>
+        <tr><td>"Employee wellbeing and engagement"</td><td>Exude, OneDigital, JSBG</td><td>Resonates with HR directors; does not reach the CFO who holds the renewal budget.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- White space gaps -->
+  <h3 class="sub" style="margin-top:36px">Five gaps nobody owns</h3>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">GAP 01 &middot; OPPORTUNITY: HIGH</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px">Named-Outcome Proof at Scale</div>
+    <div style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">No competitor publishes quantified, named-strategy case studies with specific dollar outcomes. JSBG: 5. OneDigital: 1 (percentage only). Precision Benefits: 0. Exude: 0. Triton: 0. This is not a future advantage to build. It exists today. The gap is amplification, not production.</div>
+    <div class="why"><b>Evidence:</b> All four competitor sites researched. Dollar-figure case study count: JSBG = 5 / All others = 0. The case studies are on the website but are not being served to HR Directors and CFOs before they renew with someone else.</div>
+  </div>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">GAP 02 &middot; OPPORTUNITY: HIGH</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px">Founder Access as a Named Guarantee, Not a Brand Attribute</div>
+    <div style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">Every firm claims personal service. No competitor ties named-individual accountability &mdash; with specific credentials and carrier relationships &mdash; directly to stated client outcomes. OneDigital markets a platform, not a person. Precision names an advisor in testimonials but does not center the founder. Exude markets team culture. Triton is entirely anonymous.</div>
+    <div class="why"><b>Why it matters:</b> A CFO signing a benefits contract worth $200K&ndash;$500K/year is not buying a firm. They are buying a person's judgment. The primary fear in broker relationships is that the person who sold the account becomes unavailable after signing. JSBG is the only firm where the founder is explicitly the delivery mechanism.</div>
+  </div>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">GAP 03 &middot; OPPORTUNITY: MEDIUM-HIGH</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px">Captive Positioned as Earned Access, Not a Menu Checkbox</div>
+    <div style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">Every competitor lists captive as a service line bullet. No one positions the expertise as candidate-specific, earned over 15 years, with a published $380K outcome. An employer with 200+ employees and favorable claims history entering a captive conversation is worth 3&ndash;5x the annual retainer of a standard group health renewal. The conversation is uncontested.</div>
+    <div class="why"><b>Evidence:</b> OneDigital has a Captive Center of Excellence but promotes it as a platform feature. No competitor has a captive case study with named industry, employee count, and dollar figure. JSBG has one.</div>
+  </div>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">GAP 04 &middot; OPPORTUNITY: HIGH</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px">Talent and Retention Framing for the CEO Buyer</div>
+    <div style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">All five firms lead with cost reduction. None prominently position benefits strategy as a talent acquisition and retention differentiator &mdash; despite this being the primary reason a CEO (not a CFO) chooses to invest in better benefits. The HSA case study (benefits moved from last to first in employee satisfaction) is the proof story. The message lane is uncontested.</div>
+    <div class="why"><b>Target:</b> CEOs at 50&ndash;200 employee professional services, technology, and healthcare-staffing firms actively competing for talent against larger employers. Distinct buyer, distinct message, distinct case study.</div>
+  </div>
+
+  <div class="card tl">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">GAP 05 &middot; OPPORTUNITY: MEDIUM</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px">Proactive Pre-Renewal Intervention as a Marketing Message</div>
+    <div style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">No competitor markets proactive renewal monitoring. All positioning is reactive: "call us when you get your number." Case Study 5 demonstrates exactly this capability (18% to 4.2%, three phone calls). The more powerful message is forward-looking: "we monitor your renewal cycle and intervene before you see the number." The 90&ndash;180 day pre-renewal window is the highest-value marketing moment in this category.</div>
+    <div class="why"><b>Campaign timing:</b> August&ndash;October annually for calendar-year group health plans. No enrichment tool required. Run heavier budget in this window every year.</div>
+  </div>
+
+  <!-- Competitor profiles: full, always visible -->
+  <h3 class="sub" style="margin-top:36px">Competitor profiles in full</h3>
+
+  <div class="card tb">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Competitor 01 &middot; Primary Threat (300+ employees)</div>
+        <div style="font-weight:700;font-size:16px;color:var(--ink)">OneDigital (incl. Kistler Tiffany Benefits)</div>
+        <div style="font-size:12px;color:var(--muted)">onedigital.com &middot; National &middot; 5,000+ employees &middot; Acquired Kistler Tiffany 2020</div>
+      </div>
+      <span class="pill lo">1 case study (no dollar figure)</span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Positioning</td><td>"Control costs. Reduce risk. Strengthen workforce performance." Platform-scale advisory; proactive; data-driven; not just a broker at renewal.</td></tr>
+      <tr><td>Differentiators</td><td>Analytics platform for board-level insights; Self-funded and Stop Loss Center of Excellence; Strategic pharmacy consulting including GLP-1 oversight; Global benefits for multinational employers; Ben Admin tech connecting HRIS, payroll, and carriers.</td></tr>
+      <tr><td>Target Audience</td><td>Mid-market to enterprise. Platform advantages kick in at 500+ employees; under 300, complexity becomes a liability.</td></tr>
+      <tr><td>Proof</td><td>One named case study: 23% cost reduction for a multi-state manufacturer (no dollar figure). CFO video testimonials. No Philadelphia-specific outcomes published.</td></tr>
+      <tr><td>Entanglement</td><td>High &mdash; Ben Admin platform integrates HRIS and payroll, making switching expensive.</td></tr>
+      <tr><td>Vulnerability</td><td>Post-acquisition integration tension between Kistler Tiffany&rsquo;s relationship model and OneDigital&rsquo;s platform-first approach. Relationship continuity uncertain post-sale. Size creates process friction at accounts under 200 employees. Messaging is generic across verticals with no local specificity.</td></tr>
+    </table></div>
+    <div class="why"><b>Strategic read:</b> OneDigital wins on platform and enterprise credibility; loses on founder access, boutique responsiveness, and named-individual accountability. For any employer with under 300 employees who wants their broker on speed dial, the firm&rsquo;s size is a liability regardless of capabilities. Below 300 employees, JSBG wins this comparison on every decision criterion that matters.</div>
+  </div>
+
+  <div class="card tt">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Competitor 02 &middot; Most Directly Beatable</div>
+        <div style="font-weight:700;font-size:16px;color:var(--ink)">Precision Benefits Group</div>
+        <div style="font-size:12px;color:var(--muted)">precisionbenefits.com &middot; Philadelphia, PA &middot; Founded 2003 &middot; 2&ndash;10 employees</div>
+      </div>
+      <span class="pill lo">0 case studies</span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Positioning</td><td>"Helping You Care for Your People / Team / Company." Tagline: "Ready to Switch Your Employee Benefits Broker?" &mdash; explicitly solicits dissatisfied clients.</td></tr>
+      <tr><td>Differentiators claimed</td><td>Responsiveness and communication quality (cited in testimonials). Nonprofit sector experience. PEO as a listed service option. Self-funded and captive listed.</td></tr>
+      <tr><td>Target Audience</td><td>Broad Philadelphia and NJ employer base. Testimonials reference 50&ndash;180 employee range. Nonprofits prominently featured.</td></tr>
+      <tr><td>Proof</td><td>Client logos only (Travis Manion Foundation, Motorsport). Testimonials with named roles but no named companies, no dollar figures, no quantified outcomes. Philadelphia Inquirer HRA feature cited. No case studies.</td></tr>
+      <tr><td>Entanglement</td><td>Low &mdash; relationship-only, no proprietary technology platform.</td></tr>
+      <tr><td>Vulnerability</td><td>Website design and content depth clearly below JSBG&rsquo;s current investment. 2&ndash;10 employees limits capacity reassurance. Thought leadership is compliance-newsletter style, not strategic. Zero quantified proof is the critical gap &mdash; any employer evaluating both firms will find JSBG&rsquo;s five case studies overwhelming by comparison.</td></tr>
+    </table></div>
+    <div class="why"><b>Strategic read:</b> The most direct geographic and model analog, and the easiest to beat in a side-by-side evaluation. Any employer who asks "show me a result like mine" ends the conversation immediately in JSBG&rsquo;s favor. The only scenario where Precision wins is if the buyer never evaluates evidence and decides purely on a warm referral.</div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--moss)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Competitor 03 &middot; Different Angle, Same ICP</div>
+        <div style="font-weight:700;font-size:16px;color:var(--ink)">Exude, Inc.</div>
+        <div style="font-size:12px;color:var(--muted)">exudeinc.com &middot; Philadelphia, PA &middot; Founded 1996 &middot; ~$11.6M revenue &middot; Division of Patriot Growth Insurance Services</div>
+      </div>
+      <span class="pill lo">0 case studies</span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Positioning</td><td>"All Things People" &mdash; Employee Benefits, HR, DEI, and Leadership Development as an integrated human capital platform. Not just a benefits broker but a full people-consulting firm.</td></tr>
+      <tr><td>Differentiators claimed</td><td>Multi-practice model (benefits + HR + DEI + leadership); 150+ nonprofit clients; 24/7 employee advocacy; multi-year strategic benefits strategy; nationally recognized workplace culture awards.</td></tr>
+      <tr><td>Target Audience</td><td>Philadelphia metro, small to large. Strong nonprofit vertical. 600+ clients.</td></tr>
+      <tr><td>Proof</td><td>600+ client count on LinkedIn. National best-place-to-work awards. Mployer recognition for self-funded expertise. No outcome-quantified case studies despite the large client base. No dollar figures published anywhere.</td></tr>
+      <tr><td>Entanglement</td><td>Medium &mdash; multi-practice relationships plus Zywave client portal create some stickiness.</td></tr>
+      <tr><td>Vulnerability</td><td>Multi-practice breadth dilutes benefits specialization for CFO buyers focused on cost outcomes. DEI and leadership positioning misaligned with financial decision-making frame. Now a division of Patriot Growth Insurance Services &mdash; independent advisor claim is softened. No outcome-quantified proof despite 30 years and 600+ clients.</td></tr>
+    </table></div>
+    <div class="why"><b>Strategic read:</b> Exude competes on breadth and culture, not negotiation outcomes. Least likely to win on "show me a renewal you moved" or "what&rsquo;s your captive track record." The Patriot Growth acquisition introduces the same relationship-continuity question that follows all roll-up sales. For employers who buy on financial outcomes, JSBG&rsquo;s case studies make this comparison easy.</div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--muted)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div>
+        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Competitor 04 &middot; Volume Commodity</div>
+        <div style="font-weight:700;font-size:16px;color:var(--ink)">Triton Benefits &amp; HR Solutions</div>
+        <div style="font-size:12px;color:var(--muted)">tritonhr.com &middot; National &middot; $300M+ annual premium managed (self-reported)</div>
+      </div>
+      <span class="pill lo">0 case studies</span>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Positioning</td><td>"An insurance plan solution, not just a simple spreadsheet." Volume-leverage national brokerage. Fast quote delivery as the primary value proposition.</td></tr>
+      <tr><td>Differentiators claimed</td><td>$300M annual premium = carrier leverage; 100+ years combined team expertise; Telehealth and wellness technology included; Full service stack (fully insured, self-funded, level-funded, HSA, HRA, 401k, COBRA).</td></tr>
+      <tr><td>Target Audience</td><td>National. Philadelphia page is a geographic SEO landing page, not a locally embedded firm. No named local advisors visible.</td></tr>
+      <tr><td>Proof</td><td>Self-reported premium volume only. No named client case studies, no testimonials, no outcome metrics on the Philadelphia page. Pure lead-generation model.</td></tr>
+      <tr><td>Entanglement</td><td>Low &mdash; quote-and-place model with no proprietary technology platform or ongoing relationship infrastructure.</td></tr>
+      <tr><td>Vulnerability</td><td>Philadelphia presence is an SEO page, not a regionally embedded team. National call-center model creates a commoditized, transactional feel. Zero thought leadership or educational content. No founder story, no named credentials, no outcome proof. Loses immediately on any "tell me about a client like mine" comparison.</td></tr>
+    </table></div>
+    <div class="why"><b>Strategic read:</b> Volume-scale commodity broker. Competes on speed and apparent premium leverage. The most vulnerable of the four on any qualitative evaluation. JSBG&rsquo;s case study-led outreach directly exposes the proof gap that Triton cannot close.</div>
+  </div>
+
+  <!-- Ownable UVP direction -->
+  <h3 class="sub" style="margin-top:40px">Ownable positioning direction</h3>
+  <div class="callout">
+    <div class="k">Recommended UVP</div>
+    <div style="font-size:15px;color:var(--chalk);line-height:1.6;font-style:italic">"JS Benefits Group helps Mid-Atlantic employers with 50 to 500 employees stop accepting their carrier&rsquo;s renewal number &mdash; by deploying 32 years of direct underwriter relationships, proven cost structures (captives, self-funding, level-funded, PBM audits), and outcome-backed case studies that broker quotes alone cannot produce."</div>
+  </div>
+
+  <div class="grid2" style="margin:16px 0">
+    <div class="card" style="border-top:3px solid var(--terracotta)">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--terracotta);margin-bottom:10px">Messaging to dial back</div>
+      <ul style="padding-left:16px;font-size:13px;color:var(--chalk)">
+        <li style="margin-bottom:6px">"We reduce costs" as a headline &mdash; all five firms lead with this; it no longer differentiates</li>
+        <li style="margin-bottom:6px">"We&rsquo;re more than a broker / strategic partner" &mdash; identical language used by all competitors</li>
+        <li style="margin-bottom:6px">"30+ carriers" &mdash; table stakes in this category, does not answer "why you"</li>
+        <li style="margin-bottom:6px">"Employee wellbeing" as a primary hook &mdash; does not reach the CFO who holds budget authority</li>
+      </ul>
+    </div>
+    <div class="card tm">
+      <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);margin-bottom:10px">Ownable differentiators</div>
+      <ul style="padding-left:16px;font-size:13px;color:var(--chalk)">
+        <li style="margin-bottom:6px">32-year <strong>direct underwriter access</strong> (not broker-to-sales-rep): verifiable, specific, impossible to fake</li>
+        <li style="margin-bottom:6px"><strong>Five quantified case studies</strong> with named strategies and dollar figures: the only firm in this market with this proof depth</li>
+        <li style="margin-bottom:6px">Captive placement with <strong>15+ years of track record</strong> and a published $380K outcome: no competitor has a captive case study</li>
+        <li style="margin-bottom:6px">Jennifer Schaefer: <strong>named founder with SHRM-SCP, CLU, ChFC, RHU, REBC, Forbes Council</strong> membership</li>
+        <li style="margin-bottom:6px">Employee Navigator included: <strong>technology stickiness</strong> no boutique competitor matches</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Messaging hooks by buying stage -->
+  <h3 class="sub" style="margin-top:32px">Messaging hooks by buying stage</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Stage</th><th>Hook</th><th>Angle</th></tr></thead>
+    <tbody>
+      <tr><td>Unaware</td><td>"Your carrier&rsquo;s renewal math assumes you won&rsquo;t push back. Here&rsquo;s what happens when you do."</td><td>Challenge the default; introduce the problem before naming the solution</td></tr>
+      <tr><td>Unaware</td><td>"Most employers with under 300 employees are subsidizing the insurance market&rsquo;s worst risks. Three structures change that."</td><td>Financial frame for CFO; creates category awareness before naming JSBG</td></tr>
+      <tr><td>Unaware</td><td>"If your broker hasn&rsquo;t called your underwriter directly, they&rsquo;re working from the same quote you could have gotten yourself."</td><td>Surfaces the broker-handoff anxiety that drives switching decisions</td></tr>
+      <tr><td>Aware</td><td>"A Bucks County manufacturer moved from HDHP employee complaints to $0 out-of-pocket hospital costs. Net cost to the employer: zero."</td><td>GAP plan case study; specific, local, quantified</td></tr>
+      <tr><td>Aware</td><td>"We&rsquo;ve been placing captives for 15 years. Most brokers added it to their menu last year. The difference shows up in the actuarial work."</td><td>Earned expertise vs. checkbox positioning; works on CFOs researching self-funding</td></tr>
+      <tr><td>Aware</td><td>"32 years of carrier relationships means we call the underwriter. Not the sales rep. Not the account manager. The underwriter."</td><td>The mechanism that explains the case study outcomes</td></tr>
+      <tr><td>Engaged</td><td>"Free benefits analysis: we show you exactly what the negotiation would look like and what it could produce. No obligation."</td><td>Low-friction conversion; answers the "what do I get" objection before it forms</td></tr>
+      <tr><td>Engaged</td><td>"We retain 95% of our clients. Ask your current broker what their number is."</td><td>Social proof via retention rate; inverts the comparison</td></tr>
+      <tr><td>Engaged</td><td>"See how we turned an 18% renewal into 4.2% &mdash; with three phone calls."</td><td>Case Study 5 as the most direct proof of the "underwriter access" differentiator</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="btnrow"><a class="btn primary" data-goto="targeting">See who to target &rarr;</a><a class="btn ghost" data-goto="overview">Back to overview</a></div>
+</section>
+
+<!-- ============================================================
+     TAB 3: TARGETING
+     ============================================================ -->
+<section class="view" id="targeting">
+  <div class="kicker">Audience Architecture &middot; Cold Start &middot; 3 Personas</div>
+  <h2 class="sec">Who to target, and <em>in what order</em>.</h2>
+  <p style="font-size:14px;color:var(--chalk);margin-bottom:24px;max-width:700px">JS Benefits Group has no confirmed LinkedIn pixel, no prior ad account, no known CRM upload history. This is a cold start. Early campaigns function as signal-harvesting and warm pool manufacturing as much as conversion drivers. The Insight Tag is a launch-blocking action before any campaign goes live.</p>
+
+  <!-- Budget -->
+  <div style="display:flex;height:46px;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:0 0 8px;font-family:'JetBrains Mono';font-size:11px;font-weight:700">
+    <div style="flex:40;background:var(--moss);color:var(--bone);display:flex;align-items:center;justify-content:center;gap:6px">40% &middot; Warm</div>
+    <div style="flex:35;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px">35% &middot; ABM</div>
+    <div style="flex:25;background:var(--terracotta);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px">25% &middot; Cold</div>
+  </div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:28px">Cold start allocation. Shift to 60/25/15 once warm pool exceeds ~500 matched members (~60&ndash;90 days post-launch). Minimum $5K/mo to run all three tiers. Under $3K: single cold audience only.</div>
+
+  <!-- Efficiency Ladder -->
+  <h3 class="sub">Audience efficiency ladder</h3>
+  <div class="ladder">
+    <div class="rung warm">
+      <div class="rl">Tier 1 &middot; Warm</div>
+      <div class="rn">Retargeting</div>
+      <div class="rp">$75&ndash;$150 CPL</div>
+      <div class="rd">Pixel visitors, ad engagers, company page followers, CRM uploads filtered by ICP. Highest efficiency. Available day one (page followers + CRM suppression).</div>
+    </div>
+    <div class="rung abm">
+      <div class="rl">Tier 2 &middot; ABM</div>
+      <div class="rn">Named Accounts</div>
+      <div class="rp">$250&ndash;$400 CPL</div>
+      <div class="rd">Scored account lists: self-funded candidates (150&ndash;500 employees, favorable industries) and renewal-risk employers (50&ndash;200 employees, Mid-Atlantic). Educational content first, conversion on retarget.</div>
+    </div>
+    <div class="rung cold">
+      <div class="rl">Tier 3 &middot; Cold</div>
+      <div class="rn">Selective Cold</div>
+      <div class="rp">$300&ndash;$600+ CPL</div>
+      <div class="rd">One persona at a time. Primary job: build the warm pool. Audience Expansion OFF. LinkedIn Audience Network OFF. Measure by downstream warm engagement, not direct conversion.</div>
+    </div>
+    <div class="rung extend">
+      <div class="rl">Tier 4 &middot; Extend</div>
+      <div class="rn">Meta / Programmatic</div>
+      <div class="rp">After Growth</div>
+      <div class="rd">Inherit the warm pool LinkedIn built. Run after the pixel pool is established and ICP is verified. Lower CPM than LinkedIn; higher reach against a now-qualified audience.</div>
+    </div>
+  </div>
+
+  <!-- Three cold personas -->
+  <h3 class="sub" style="margin-top:32px">Three cold personas &mdash; run one at a time</h3>
+
+  <div class="card tt">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--terracotta);margin-bottom:6px">PERSONA 1 &middot; START HERE</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:10px">CFO / Financial Decision-Maker</div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Job Title Keywords</td><td><span class="tag">CFO</span><span class="tag">VP Finance</span><span class="tag">Controller</span><span class="tag">Director of Finance</span><span class="tag">VP Operations</span></td></tr>
+      <tr><td>Seniority</td><td><span class="tag">Director</span><span class="tag">VP</span><span class="tag">CXO</span></td></tr>
+      <tr><td>Function</td><td><span class="tag">Finance</span><span class="tag">Operations</span></td></tr>
+      <tr><td>Company Size</td><td><span class="tag">51&ndash;500 employees</span></td></tr>
+      <tr><td>Industry</td><td><span class="tag">Professional Services</span><span class="tag">Technology</span><span class="tag">Manufacturing</span><span class="tag">Healthcare</span></td></tr>
+      <tr><td>Geography</td><td><span class="tag">PA</span><span class="tag">NJ</span><span class="tag">DE</span><span class="tag">MD</span><span class="tag">NY</span></td></tr>
+      <tr><td>Est. Audience</td><td>45,000&ndash;90,000 (verify post-build)</td></tr>
+      <tr><td>Exclusions</td><td><span class="tag ex">Current clients</span><span class="tag ex">Competitor domains</span><span class="tag ex">Seniority: Entry, Training</span></td></tr>
+      <tr><td>Expansion</td><td><span class="tag ex">Audience Expansion: OFF</span><span class="tag ex">LAN: OFF</span></td></tr>
+    </table></div>
+    <div class="why"><b>Case study to use:</b> Negotiation story ($247K, 18% to 4.2%) + Captive story ($380K, 24 months). Pain hook: "Your carrier's renewal math assumes you won't push back."</div>
+  </div>
+
+  <div class="card tt">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--terracotta);margin-bottom:6px">PERSONA 2 &middot; ADD IN PHASE 2</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:10px">HR Director / Benefits Decision-Maker</div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Job Title Keywords</td><td><span class="tag">HR Director</span><span class="tag">CHRO</span><span class="tag">Benefits Director</span><span class="tag">Benefits Manager</span><span class="tag">Total Rewards Manager</span><span class="tag">HR Manager</span></td></tr>
+      <tr><td>Seniority</td><td><span class="tag">Manager</span><span class="tag">Director</span><span class="tag">VP</span><span class="tag">CXO</span></td></tr>
+      <tr><td>Function</td><td><span class="tag">Human Resources</span></td></tr>
+      <tr><td>Company Size</td><td><span class="tag">51&ndash;500 employees</span></td></tr>
+      <tr><td>Member Skills (enrichment)</td><td><span class="tag">Employee Benefits</span><span class="tag">ACA Compliance</span><span class="tag">Open Enrollment</span></td></tr>
+      <tr><td>Est. Audience</td><td>50,000&ndash;110,000 (verify post-build)</td></tr>
+    </table></div>
+    <div class="why"><b>Case study to use:</b> HDHP/GAP bridge ($134K savings, $0 employee OOP for hospital). Talent/retention angle for companies actively hiring. Hook: "HDHP deductible complaints don't require switching to a PPO."</div>
+  </div>
+
+  <div class="card tt">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--terracotta);margin-bottom:6px">PERSONA 3 &middot; ADD IN PHASE 2</div>
+    <div style="font-weight:700;font-size:16px;color:var(--ink);margin-bottom:10px">CEO / Business Owner at SMB (50&ndash;150 Employees)</div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Job Title Keywords</td><td><span class="tag">CEO</span><span class="tag">Founder</span><span class="tag">President</span><span class="tag">Managing Partner</span><span class="tag">Business Owner</span></td></tr>
+      <tr><td>Seniority</td><td><span class="tag">Owner</span><span class="tag">CXO</span><span class="tag">Partner</span></td></tr>
+      <tr><td>Company Size</td><td><span class="tag">51&ndash;200 employees</span></td></tr>
+      <tr><td>Geography</td><td><span class="tag">Bucks County PA</span><span class="tag">Philadelphia Metro</span><span class="tag">South NJ</span><span class="tag">Delaware</span></td></tr>
+      <tr><td>Member Groups</td><td><span class="tag">Bucks County Chamber</span><span class="tag">Philadelphia Chamber</span><span class="tag">PHCC</span></td></tr>
+      <tr><td>Est. Audience</td><td>40,000&ndash;80,000 (verify post-build)</td></tr>
+    </table></div>
+    <div class="why"><b>Case study to use:</b> HSA story (benefits moved from last to first in employee satisfaction). Hook: "Your benefits package is losing you candidates to companies 3x your size."</div>
+  </div>
+
+  <!-- Thought Leader Ads -->
+  <div class="callout" style="border-left-color:var(--canopy-text)">
+    <div class="k">Thought Leader Ads &middot; Jennifer Schaefer &middot; Run from Day One</div>
+    <div style="font-size:14px;color:var(--chalk)">Jennifer's existing LinkedIn posts (Forbes Business Council content, ACA updates, cost-containment insights) run as paid units against all three cold personas from week one. No new creative. No production cycle. This is the lowest-friction, highest-credibility entry point for a founder-led firm. Budget: 15&ndash;20% of total LinkedIn spend. Primary job: build warm engager pool faster than company content alone, while positioning Jennifer as the expert before any conversion ask.</div>
+  </div>
+
+  <!-- ABM lists full detail -->
+  <h3 class="sub" style="margin-top:36px">ABM Target Account Architecture</h3>
+
+  <div class="card tb" style="margin-bottom:12px">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue);margin-bottom:6px">ABM LIST 1 &middot; PRIMARY &middot; SELF-FUNDED / CAPTIVE CANDIDATES</div>
+    <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:10px">150&ndash;500 employee employers with favorable claims profile &mdash; Mid-Atlantic</div>
+    <div class="tbl-wrap"><table>
+      <tr><td>List Source</td><td>Sales Navigator: headcount 150&ndash;500, target industries, Mid-Atlantic geography. Enrich in Clay with claims-favorability proxies: white-collar workforce indicators, wellness program signals, low sick-day proxies.</td></tr>
+      <tr><td>Company Size</td><td><span class="tag">201&ndash;500 employees</span></td></tr>
+      <tr><td>Industries</td><td><span class="tag">Professional Services (Law, Accounting, Consulting)</span><span class="tag">Technology</span><span class="tag">Manufacturing (light industrial)</span><span class="tag">Financial Services</span></td></tr>
+      <tr><td>Geography</td><td><span class="tag">PA</span><span class="tag">NJ</span><span class="tag">DE</span><span class="tag">MD</span><span class="tag">NY</span></td></tr>
+      <tr><td>Person-Level Filters</td><td><span class="tag">CFO</span><span class="tag">VP Finance</span><span class="tag">Controller</span><span class="tag">HR Director</span><span class="tag">CHRO</span><span class="tag">Benefits Director</span> &mdash; Seniority: Director, VP, CXO</td></tr>
+      <tr><td>Est. Audience</td><td>3,000&ndash;8,000 people after person-level filtering. Verify post-upload.</td></tr>
+      <tr><td>Content Pairing</td><td>Captive case study ($380K, Maryland healthcare org) + "Is a captive right for your company?" educational content first. Free benefits analysis CTA on account retarget only.</td></tr>
+      <tr><td>Expected CPL</td><td>$250&ndash;$400. Lower once retarget pool from initial ABM impressions builds.</td></tr>
+    </table></div>
+    <div class="why"><b>Why this list:</b> No competitor has a published captive case study with named outcomes. This is the highest-ACV conversation JSBG can have and the lane is completely uncontested in paid media.</div>
+  </div>
+
+  <div class="card tb">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue);margin-bottom:6px">ABM LIST 2 &middot; SECONDARY &middot; RENEWAL-RISK EMPLOYERS</div>
+    <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:10px">50&ndash;200 employee Mid-Atlantic employers approaching renewal cycle</div>
+    <div class="tbl-wrap"><table>
+      <tr><td>Company Size</td><td><span class="tag">51&ndash;200 employees</span></td></tr>
+      <tr><td>Industries</td><td>All industries. Prioritize: <span class="tag">Construction/Contracting</span><span class="tag">Professional Services</span><span class="tag">Retail</span><span class="tag">Healthcare</span></td></tr>
+      <tr><td>Geography</td><td><span class="tag">Bucks County</span><span class="tag">Philadelphia Metro</span><span class="tag">PA/NJ/DE/MD within 75 miles of Newtown</span></td></tr>
+      <tr><td>Person-Level Filters</td><td><span class="tag">HR Director</span><span class="tag">HR Manager</span><span class="tag">Benefits Manager</span><span class="tag">CFO</span><span class="tag">VP Operations</span><span class="tag">Business Owner</span><span class="tag">President</span></td></tr>
+      <tr><td>Content Pairing</td><td>Negotiation case study (18% to 4.2%, $247K saved) + "Your broker&rsquo;s renewal isn&rsquo;t final." Free benefits analysis CTA.</td></tr>
+      <tr><td>Timing Pulse</td><td>Run heavier impressions Aug&ndash;Oct annually. Calendar-year group health plans decide broker relationships in this window. No enrichment tool required for timing; just increase budget allocation.</td></tr>
+    </table></div>
+  </div>
+
+  <!-- Intent signals: always visible, not behind toggle -->
+  <h3 class="sub" style="margin-top:36px">Third-party enrichment signals for ABM scoring</h3>
+  <p style="font-size:13px;color:var(--chalk);margin-bottom:14px;max-width:680px">Enrich the ABM list in Clay using these signals. Score each account 1&ndash;10 on composite fit plus timing. Upload scored Tier A accounts to LinkedIn as Matched Audience. Refresh monthly.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Signal</th><th>What It Indicates</th><th>Source</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>HR or Benefits Manager job posting</td><td>Benefits strategy review is imminent. Highest-signal pre-renewal trigger from public data. Contact the account 30&ndash;60 days after the job post appears.</td><td>LinkedIn Jobs / Indeed / Clay / Trigify</td><td><span class="pill hi">High</span></td></tr>
+      <tr><td>Headcount growth 20%+ in 12 months</td><td>Companies crossing 50 (ACA applicable large employer threshold), 100 (self-funded viability), or 200 (captive viability) face benefits complexity inflection points that force a strategy review.</td><td>LinkedIn headcount data / Clay</td><td><span class="pill hi">High</span></td></tr>
+      <tr><td>Bombora / 6sense intent: benefits broker, health insurance, cost containment</td><td>Company is in active research mode on the category. These are the highest-priority ABM accounts. Route to conversion offer immediately rather than starting with educational content.</td><td>Bombora Company Surge / 6sense / ZoomInfo Intent</td><td><span class="pill hi">High</span></td></tr>
+      <tr><td>Q3/Q4 renewal window (August&ndash;October)</td><td>Most group health plans renew January 1. The broker decision window is August&ndash;October. Run significantly heavier LinkedIn and search budget in this window every year. No enrichment tool required &mdash; this is a campaign calendar trigger.</td><td>Campaign calendar</td><td><span class="pill hi">High</span></td></tr>
+      <tr><td>No benefits admin platform detected (technographic)</td><td>Companies with 50&ndash;300 employees running HR without dedicated benefits technology are actively underserved. JSBG&rsquo;s Employee Navigator inclusion directly solves this. Signals a broker relationship not providing technology value.</td><td>HG Insights / BuiltWith / Clay</td><td><span class="pill med">Medium</span></td></tr>
+      <tr><td>Employee Navigator usage at a competitor firm (technographic)</td><td>Companies already oriented toward managed benefits platforms. A broker switch while keeping the technology is lower-friction.</td><td>BuiltWith / HG Insights</td><td><span class="pill med">Medium</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- Full keyword table -->
+  <h3 class="sub" style="margin-top:36px">Google Search: full keyword architecture (14 clusters)</h3>
+  <p style="font-size:13px;color:var(--chalk);margin-bottom:14px;max-width:680px">Launch with the first six (high-intent capture). Add conquest and mid-intent only after conversion tracking is verified and core campaigns are optimized.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Keyword Cluster</th><th>Example Terms</th><th>Intent</th><th>Tactical Note</th></tr></thead>
+    <tbody>
+      <tr><td>Employee benefits broker [geo]</td><td>"employee benefits broker Philadelphia," "benefits broker Bucks County PA," "employee benefits consulting NJ"</td><td><span class="pill hi">High</span></td><td>Core campaign. Geo-modify aggressively. Highest conversion probability. Launch first.</td></tr>
+      <tr><td>Switch / change benefits broker</td><td>"switch benefits broker," "change employee benefits provider," "how to switch health insurance broker"</td><td><span class="pill hi">High</span></td><td>Highest-intent switching signal. Employer has already decided to switch; evaluating candidates. Free analysis CTA.</td></tr>
+      <tr><td>Self-funded health plan consulting</td><td>"self-funded health plan consulting," "self-insured health plan advisor," "level funded health plan broker"</td><td><span class="pill hi">High</span></td><td>Low volume, high ACV. Exact match only. Send to dedicated self-funded page. Own this lane immediately.</td></tr>
+      <tr><td>Reduce employee healthcare costs</td><td>"how to reduce employee healthcare costs," "lower group health insurance costs," "employee benefits cost reduction"</td><td><span class="pill hi">High</span></td><td>Finance-led buyer. Problem-first entry point. Send to case study page or cost savings ROI page.</td></tr>
+      <tr><td>Brand defense: JS Benefits Group</td><td>"JS Benefits Group," "Jennifer Schaefer benefits," "JSBG employee benefits"</td><td><span class="pill hi">High</span></td><td>Always-on. Low cost, high conversion rate. Prevents competitor conquest of branded traffic.</td></tr>
+      <tr><td>Employee benefits advisor near me</td><td>"employee benefits advisor near me," "benefits advisor for small business," "benefits advisor mid-Atlantic"</td><td><span class="pill hi">High</span></td><td>Geo-intent at point of evaluation. Include "near me" as a keyword, not just a modifier.</td></tr>
+      <tr><td>Group health insurance consultant</td><td>"group health insurance consultant PA," "group health plan advisor Philadelphia"</td><td><span class="pill hi">High</span></td><td>Overlaps with broker terms. Run as a separate ad group to test message variation.</td></tr>
+      <tr><td>Captive insurance for employers</td><td>"group captive health insurance," "captive insurance plan for employers," "captive benefits program"</td><td><span class="pill hi">High</span></td><td>Very low volume, very high intent. Exact match only. Signals the highest-ACV conversation.</td></tr>
+      <tr><td>Competitor conquest: OneDigital</td><td>"OneDigital alternative," "OneDigital Philadelphia competitor," "alternatives to OneDigital benefits"</td><td><span class="pill med">Conquest</span></td><td>Separate campaign. Do not use competitor name in ad copy. Angle: boutique access vs. platform scale.</td></tr>
+      <tr><td>Competitor conquest: Kistler Tiffany</td><td>"Kistler Tiffany Benefits alternative," "Kistler Tiffany competitor"</td><td><span class="pill med">Conquest</span></td><td>Niche but high-value. Targets post-acquisition accounts with relationship-continuity anxiety.</td></tr>
+      <tr><td>ACA compliance for employers</td><td>"ACA compliance for employers," "ACA employer mandate advisor," "affordable care act employer consultant"</td><td><span class="pill med">Medium</span></td><td>Bridge to full benefits relationship. Send to compliance page first, retarget with broader offer.</td></tr>
+      <tr><td>HDHP employee complaints / alternatives</td><td>"HDHP employee complaints," "alternatives to HDHP," "high deductible plan employee satisfaction"</td><td><span class="pill med">Medium</span></td><td>Send to GAP plan case study page. High message-match to the documented HDHP/GAP bridge scenario.</td></tr>
+      <tr><td>Employee benefits benchmarking</td><td>"employee benefits benchmark," "how do my benefits compare," "employee benefits benchmark tool"</td><td><span class="pill med">Medium</span></td><td>JSBG has an existing benchmark calculator. This keyword drives directly to it. Convert post-use.</td></tr>
+      <tr><td>PBM management / pharmacy costs</td><td>"PBM management services," "pharmacy benefit manager consulting," "reduce pharmacy costs employer"</td><td><span class="pill med">Medium</span></td><td>Low volume, signals high-ACV buyer. CFO or benefits director with a pharmacy cost problem.</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- Negative keywords -->
+  <div class="callout" style="margin-top:20px">
+    <div class="k">Negative keywords &mdash; add before launch</div>
+    <div style="font-size:13px;color:var(--chalk);margin-bottom:8px">Prevent wasted spend on individual/consumer health insurance searches, HR software buyers, and job seekers.</div>
+    <div>
+      <span class="tag ex">individual health insurance</span>
+      <span class="tag ex">personal health insurance</span>
+      <span class="tag ex">Medicare</span>
+      <span class="tag ex">Medicaid</span>
+      <span class="tag ex">ACA marketplace individual</span>
+      <span class="tag ex">health insurance for self employed</span>
+      <span class="tag ex">freelancer health insurance</span>
+      <span class="tag ex">student health insurance</span>
+      <span class="tag ex">HR software</span>
+      <span class="tag ex">HRIS software</span>
+      <span class="tag ex">benefits software</span>
+      <span class="tag ex">benefits platform</span>
+      <span class="tag ex">jobs</span>
+      <span class="tag ex">careers</span>
+      <span class="tag ex">pet insurance</span>
+      <span class="tag ex">travel insurance</span>
+    </div>
+  </div>
+
+  <div class="btnrow"><a class="btn primary" data-goto="ecosystem">See the ecosystem &rarr;</a><a class="btn ghost" data-goto="whitespace">Back to white space</a></div>
+</section>
+
+<!-- ============================================================
+     TAB 4: ECOSYSTEM (PYRAMID VISUAL)
+     ============================================================ -->
+<section class="view" id="ecosystem">
+  <div class="kicker">Marketing Ecosystem &middot; Maturity Assessment</div>
+  <h2 class="sec">Where JS Benefits Group stands &mdash; and the <em>three next moves</em>.</h2>
+  <p style="font-size:14px;color:var(--chalk);margin-bottom:28px;max-width:700px">The ecosystem pyramid maps every marketing motion across five floors, from foundation to compounding. Each floor has a gate. Gates are sequential: you cannot build Floor 3 without passing Floor 2. JS Benefits Group is sitting at the gate to Floor 2. One missing motion &mdash; conversion tracking &mdash; is holding the entire paid system back.</p>
+
+  <!-- THE PYRAMID -->
+  <div class="pyramid">
+
+    <!-- Floor 05 -->
+    <div class="floor">
+      <div class="floor-meta">
+        <div class="floor-num">Floor 05</div>
+        <div class="floor-name">Compound</div>
+        <div class="floor-badge badge-gated">Gated, waiting</div>
+      </div>
+      <div class="floor-motions">
+        <div class="motion-chip">C21 Diagnostics &amp; EBR</div>
+        <div class="motion-chip">C22 Experimentation</div>
+      </div>
+    </div>
+
+    <div class="gate-row">
+      <div class="gate-line"></div>
+      <div class="gate-text">Gate to Floor 5: enough motions running to have something worth comparing</div>
+      <div class="gate-line"></div>
+    </div>
+
+    <!-- Floor 04 -->
+    <div class="floor">
+      <div class="floor-meta">
+        <div class="floor-num">Floor 04</div>
+        <div class="floor-name">Scale and cover</div>
+        <div class="floor-badge badge-gated">Not reachable yet</div>
+      </div>
+      <div class="floor-motions">
+        <div class="motion-chip">C9 Cold and ABM</div>
+        <div class="motion-chip">C17 Outreach activation</div>
+        <div class="motion-chip">C15 Meta B2B</div>
+        <div class="motion-chip">C16 Programmatic</div>
+      </div>
+    </div>
+
+    <div class="gate-row">
+      <div class="gate-line"></div>
+      <div class="gate-text">Gate to Floor 4: enrichment at L2 and enough named accounts to be worth covering</div>
+      <div class="gate-line"></div>
+    </div>
+
+    <!-- Floor 03 -->
+    <div class="floor">
+      <div class="floor-meta">
+        <div class="floor-num">Floor 03</div>
+        <div class="floor-name">Signals and intelligence</div>
+        <div class="floor-badge badge-gated">Not reachable yet</div>
+      </div>
+      <div class="floor-motions">
+        <div class="motion-chip">C13 Account intel</div>
+        <div class="motion-chip">C14 Enrichment</div>
+        <div class="motion-chip">C10 BOF conversion</div>
+        <div class="motion-chip">C7 Conquest search</div>
+        <div class="motion-chip">C20 Sales activation</div>
+      </div>
+    </div>
+
+    <div class="gate-row">
+      <div class="gate-line"></div>
+      <div class="gate-text">Gate to Floor 3: a warm pool with delivery data to read</div>
+      <div class="gate-line"></div>
+    </div>
+
+    <!-- Floor 02 -->
+    <div class="floor">
+      <div class="floor-meta">
+        <div class="floor-num">Floor 02</div>
+        <div class="floor-name">Qualify and capture</div>
+        <div class="floor-badge badge-gated">Nothing in place</div>
+      </div>
+      <div class="floor-motions">
+        <div class="motion-chip next-move">C8 LinkedIn retargeting <span class="chip-label">NEXT 2</span></div>
+        <div class="motion-chip next-move">C4 Thought Leader amplification <span class="chip-label">NEXT 3</span></div>
+        <div class="motion-chip">C12 Visitor ID</div>
+        <div class="motion-chip">C5 Brand defense</div>
+        <div class="motion-chip">C6 Solution search</div>
+        <div class="motion-chip">C3 Distribution depth</div>
+      </div>
+    </div>
+
+    <div class="gate-row">
+      <div class="gate-line"></div>
+      <div class="gate-text" style="color:var(--terracotta)">Gate to Floor 2: C11 conversion tracking &mdash; currently missing</div>
+      <div class="gate-line"></div>
+    </div>
+
+    <!-- Floor 01 -->
+    <div class="floor f1">
+      <div class="floor-meta">
+        <div class="floor-num">Floor 01</div>
+        <div class="floor-name" style="color:var(--terracotta)">Foundation</div>
+        <div class="floor-badge badge-partial">4 of 5 in place</div>
+      </div>
+      <div class="floor-motions">
+        <div class="motion-chip active-now">C1 SEO and content <span class="chip-label">ACTIVE</span></div>
+        <div class="motion-chip active-now">C2 Founder thought leadership <span class="chip-label">ACTIVE</span></div>
+        <div class="motion-chip active-now">C18 Pages and CRO <span class="chip-label">ACTIVE</span></div>
+        <div class="motion-chip active-now">C19 Offer architecture <span class="chip-label">ACTIVE</span></div>
+        <div class="motion-chip missing">C11 Conversion tracking <span class="chip-label">NEXT 1</span></div>
+      </div>
+    </div>
+
+  </div><!-- end pyramid -->
+
+  <!-- Legend -->
+  <div class="pyramid-legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--moss)"></div>In place</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--terracotta)"></div>Missing and load-bearing</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--canopy)"></div>Next move</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--muted);opacity:0.4"></div>Gated, waiting on floor below</div>
+    <div style="margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:var(--ink)">Ecosystem Maturity <strong>18/100</strong> &middot; Stage: <strong>VALIDATE</strong></div>
+  </div>
+
+  <!-- The three next moves -->
+  <h3 class="sub" style="margin-top:36px">The three next moves, in order</h3>
+
+  <div class="grid3" style="margin:16px 0">
+    <div class="card tt">
+      <div class="mono" style="font-size:9px;letter-spacing:.12em;color:var(--terracotta);margin-bottom:6px">NEXT MOVE 1 &middot; BLOCKING</div>
+      <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:8px">C11 &middot; Install conversion tracking</div>
+      <div style="font-size:13px;color:var(--chalk)">LinkedIn Insight Tag on all pages. Free benefits analysis form as conversion event. Google Tag Manager for Google Ads. This is the gate to Floor 2. Every paid campaign before this is flying blind. Every paid campaign after it becomes measurable. Must be done in week one before the first ad runs.</div>
+    </div>
+    <div class="card tl">
+      <div class="mono" style="font-size:9px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">NEXT MOVE 2 &middot; FLOOR 2 ENTRY</div>
+      <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:8px">C8 &middot; LinkedIn retargeting</div>
+      <div style="font-size:13px;color:var(--chalk)">Company page followers and visitors are available from day one. Pixel pool builds within 60&ndash;90 days. Filter by ICP (seniority, function, company size). Run free benefits analysis CTA once pool hits 300+ matched members. This is the conversion engine that makes everything else cheaper.</div>
+    </div>
+    <div class="card tl">
+      <div class="mono" style="font-size:9px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">NEXT MOVE 3 &middot; FLOOR 2 ENTRY</div>
+      <div style="font-weight:700;font-size:15px;color:var(--ink);margin-bottom:8px">C4 &middot; Thought Leader Ads</div>
+      <div style="font-size:13px;color:var(--chalk)">Jennifer's existing posts run as paid units to CFOs, HR Directors, and business owners. No new creative. No production cycle. The fastest warm pool manufacturing available to a cold-start founder-led firm. Builds the retargetable audience that makes Floors 3 and 4 accessible.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="k">Why the gate matters</div>
+    <div style="font-size:14px;color:var(--chalk)">Without conversion tracking (C11), LinkedIn and Google campaigns cannot optimize toward outcomes. They optimize toward clicks, which is the wrong signal for a high-consideration B2B service. Installing the Insight Tag before anything else is not a technicality. It is the difference between a paid program that learns and one that spends.</div>
+  </div>
+
+  <div class="btnrow"><a class="btn primary" data-goto="howitworks">See how it all connects &rarr;</a><a class="btn ghost" data-goto="targeting">Back to targeting</a></div>
+</section>
+
+<!-- ============================================================
+     TAB 5: HOW IT WORKS
+     ============================================================ -->
+<section class="view" id="howitworks">
+  <div class="kicker">The Impactable System &middot; Create / Connect / Capture / Activate</div>
+  <h2 class="sec">One system. <em>Every channel has one job.</em></h2>
+  <p style="font-size:14px;color:var(--chalk);margin-bottom:28px;max-width:700px">Channels are not a menu. Each channel feeds the next. LinkedIn creates brand recognition that makes Google cheaper. Google creates the conversion volume that makes LinkedIn's CPL look efficient. DemandSense surfaces which accounts are ready so sales calls the right one. The order is not arbitrary.</p>
+
+  <!-- Channel cards: full-width, one per channel, easy to read -->
+  <div style="display:flex;flex-direction:column;gap:12px;margin:20px 0">
+
+    <div class="card" style="border-left:4px solid var(--canopy);border-radius:12px;padding:22px 26px">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--canopy-text)">Create</span>
+        <span style="font-family:'Archivo Black';font-size:16px;color:var(--ink)">Make demand exist</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto">LinkedIn Thought Leader Ads &middot; Case Study Content &middot; Blog &middot; YouTube</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">Jennifer Schaefer&rsquo;s existing LinkedIn posts run as paid Thought Leader Ads to CFOs, HR Directors, and business owners across the Mid-Atlantic. No new creative production required. Case study Sponsored Content deployed against both ABM lists. The thought leadership blog is already publishing weekly &mdash; this channel amplifies what already exists.</p>
+      <div class="why" style="border-top:1px solid var(--line);padding-top:10px;margin-top:0"><b style="color:var(--canopy-text)">Job in this account:</b> Manufacture the warm retargetable audience from a cold start. A CFO who sees Jennifer&rsquo;s content twice before clicking a case study ad converts at a fraction of the CPL of a cold click. Building familiarity first costs less than buying trust later.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--blue);border-radius:12px;padding:22px 26px">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)">Connect</span>
+        <span style="font-family:'Archivo Black';font-size:16px;color:var(--ink)">Qualify and convert</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto">LinkedIn Retarget &middot; ABM &middot; Free Analysis CTA</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">LinkedIn warm retarget filtered by ICP (seniority, function, company size). ABM List 1 targets captive and self-funded candidates (150&ndash;500 employees, favorable-claims industries) with the $380K captive case study. ABM List 2 targets renewal-risk employers (50&ndash;200 employees) with the negotiation story. Free benefits analysis is the conversion offer; the Benefits Benchmark Calculator serves as the mid-funnel entry point.</p>
+      <div class="why" style="border-top:1px solid var(--line);padding-top:10px;margin-top:0"><b style="color:var(--blue)">Job in this account:</b> Convert warm visitors and ABM-engaged accounts into booked calls and free analysis requests. Target CPL $75&ndash;$150 for warm retarget; $250&ndash;$400 for ABM. This is the primary revenue-generating campaign layer.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--terracotta);border-radius:12px;padding:22px 26px">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta)">Capture</span>
+        <span style="font-family:'Archivo Black';font-size:16px;color:var(--ink)">Harvest in-market demand</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto">Google Search &middot; Brand Defense &middot; Competitor Conquest</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">Google Search runs six high-intent keyword clusters at launch: "employee benefits broker [Philadelphia / Bucks County]," "switch benefits broker," "self-funded health plan consulting," "reduce employee healthcare costs," brand defense, and "employee benefits advisor near me." Brand defense runs always-on. Competitor conquest targets OneDigital and Kistler Tiffany alternative searches. Scales as LinkedIn brand awareness raises branded search volume over time.</p>
+      <div class="why" style="border-top:1px solid var(--line);padding-top:10px;margin-top:0"><b style="color:var(--terracotta)">Job in this account:</b> Catch employers who are already in-market and searching. Google does not create demand; it harvests the demand LinkedIn creates. Run from week two alongside LinkedIn but budget conservatively until conversion tracking is verified.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--clay);border-radius:12px;padding:22px 26px;opacity:0.85">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--clay)">Extend</span>
+        <span style="font-family:'Archivo Black';font-size:16px;color:var(--ink)">Scale qualified reach</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto">Meta B2B &middot; Programmatic &middot; Growth tier or later</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">Meta B2B reaches the enriched buyers LinkedIn prices out, at a fraction of the CPM &mdash; but only after the LinkedIn warm pool is established. Programmatic display and native provide account-level air cover against named ABM accounts where LinkedIn delivery runs thin. Both channels inherit the LinkedIn-qualified audience. They cannot build a qualified pool on their own.</p>
+      <div class="why" style="border-top:1px solid var(--line);padding-top:10px;margin-top:0"><b style="color:var(--clay)">Job in this account:</b> Available in Growth tier or later. Do not activate before the warm pool is established and ICP is verified from LinkedIn delivery data. Running Extend before Connect is the most common wasted-spend pattern in multi-channel B2B programs.</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--moss);border-radius:12px;padding:22px 26px">
+      <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--moss)">Activate</span>
+        <span style="font-family:'Archivo Black';font-size:16px;color:var(--ink)">Turn signal into conversation</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;color:var(--muted);margin-left:auto">DemandSense Trigger &middot; LinkedIn Outreach &middot; Web ID</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--chalk);margin-bottom:10px">When DemandSense signals show an ABM account at 3+ touchpoints (ad impression, website visit, content engagement), route to LinkedIn outreach from Jennifer&rsquo;s profile. Web ID de-anonymizes the named companies and people visiting the site, making outreach targeting precise. The hidden pipeline list &mdash; accounts with heavy ad engagement and no deal record &mdash; exports to sales weekly. Multi-touch accounts convert to pipeline at 3x+ single-touch accounts.</p>
+      <div class="why" style="border-top:1px solid var(--line);padding-top:10px;margin-top:0"><b style="color:var(--moss)">Job in this account:</b> Signal-triggered outreach arrives as a follow-up, not a cold call. The DemandSense layer is what makes the outreach feel like the right moment. Available in month 2&ndash;3 once enough signal data has accumulated to score accounts reliably.</div>
+    </div>
+
+  </div>
+
+  <!-- Compounding argument -->
+  <h3 class="sub" style="margin-top:36px">The compounding argument</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Layer</th><th>What it makes cheaper or better downstream</th></tr></thead>
+    <tbody>
+      <tr><td>Thought Leader Ads (Jennifer)</td><td>A CFO who has seen Jennifer's content twice before clicking a case study ad converts at lower CPL. Brand familiarity is a permanent CPL reducer. Building it first costs less than buying it later with conversion ads.</td></tr>
+      <tr><td>LinkedIn Insight Tag (pixel)</td><td>Retarget audiences LinkedIn has ICP-filtered run at $75&ndash;$150 CPL vs. $300&ndash;$600+ cold. The pixel is infrastructure that never stops paying back. Install before anything else runs.</td></tr>
+      <tr><td>ABM case study campaigns</td><td>Case study content running against warm ABM audiences converts at 3&ndash;5x the rate of cold case study ads. Sequence education before conversion asks.</td></tr>
+      <tr><td>Google Search</td><td>LinkedIn brand awareness raises branded search volume. Without LinkedIn first, branded search is near zero and non-brand CPCs are higher because Quality Scores are lower. LinkedIn investment improves Google's economics directly.</td></tr>
+      <tr><td>DemandSense signal layer</td><td>Surfaces accounts already leaning in. Budget follows intent rather than hoping for it. Multi-touch accounts convert to pipeline at 3x+ single-touch. The signal layer turns "we showed up" into "we knew when to call."</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- Signal layer -->
+  <h3 class="sub" style="margin-top:36px">The signals layer: five pools into one account view</h3>
+  <p style="font-size:13px;color:var(--chalk);margin-bottom:16px">Most agencies rent a dashboard. DemandSense composes five signal pools into one account-level view: who is engaging, from what company, in what role, how close they are to buying.</p>
+
+  <div class="signal-flow">
+    <div class="sig-pool"><div class="sp-num">P1</div><div class="sp-name">CRM</div><div class="sp-d">Contacts and pipeline</div></div>
+    <div class="sig-arrow">→</div>
+    <div class="sig-pool"><div class="sp-num">P2</div><div class="sp-name">LinkedIn Paid</div><div class="sp-d">Ad engagers</div></div>
+    <div class="sig-arrow">→</div>
+    <div class="sig-pool"><div class="sp-num">P3</div><div class="sp-name">LinkedIn Organic</div><div class="sp-d">Page + post views</div></div>
+    <div class="sig-arrow">→</div>
+    <div class="sig-pool"><div class="sp-num">P4</div><div class="sp-name">Companies on Site</div><div class="sp-d">Web ID: firm-level</div></div>
+    <div class="sig-arrow">→</div>
+    <div class="sig-pool"><div class="sp-num">P5</div><div class="sp-name">People on Site</div><div class="sp-d">Web ID: person-level</div></div>
+    <div class="sig-arrow">→</div>
+    <div class="sig-output"><div class="so-label">Composed into</div><div class="so-name">One Account View</div><div style="font-size:11px;color:var(--muted);margin-top:3px">Accounts in motion &middot; hidden pipeline &middot; next action</div></div>
+  </div>
+
+  <h3 class="sub" style="margin-top:32px">CRM sync: the reporting the board actually asks for</h3>
+  <div class="grid2" style="gap:14px;margin:16px 0">
+    <div class="card tb">
+      <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue);margin-bottom:8px">Influenced Revenue</div>
+      <div style="font-size:13px;color:var(--chalk)">Deals where the account had meaningful ad activity before the deal was created. Pipeline and closed-won in one view. The campaign influence score for scale-or-cut decisions. Authorise the CRM once &mdash; HubSpot or Salesforce &mdash; and deal data flows in and matches to the accounts that saw or engaged with ads.</div>
+    </div>
+    <div class="card tb">
+      <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--blue);margin-bottom:8px">Hidden Pipeline</div>
+      <div style="font-size:13px;color:var(--chalk)">Accounts with heavy ad engagement and no deal record at all. Surfaced automatically, exportable to sales, nurture, or outbound. For a firm where Jennifer is the primary relationship-builder, this is the most useful list in the system. The accounts that are warm and unknown.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="k">DemandSense walkthrough</div>
+    <div style="font-size:14px;color:var(--chalk);margin-bottom:12px">See exactly how influenced revenue is tracked from ad impression through CRM deal, including the hidden pipeline feature and account-level journey mapping.</div>
+    <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:10px;overflow:hidden">
+      <iframe src="https://www.youtube-nocookie.com/embed/7Pqs4jgyZA4" title="DemandSense Influenced Revenue Walkthrough" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <h3 class="sub" style="margin-top:32px">What we report &mdash; and what we would not promise</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Report</th><th>What it shows</th><th>Available when</th></tr></thead>
+    <tbody>
+      <tr><td>Account Exposure Map</td><td>Which ABM accounts are receiving impressions vs. which are underserved. Different plays for each.</td><td>Week 1, updated weekly</td></tr>
+      <tr><td>Warm Audience Growth Rate</td><td>Pixel pool, engager pool, page audience &mdash; the leading indicator of future CPL efficiency.</td><td>Week 1, updated weekly</td></tr>
+      <tr><td>Coverage Waterfall</td><td>Unaware &rarr; Aware &rarr; Engaged &rarr; Pipeline &rarr; Closed as counts and percentages of the addressable universe.</td><td>Month 1 with DemandSense</td></tr>
+      <tr><td>Accounts in Motion</td><td>Signal pools stacked per account. Engagement surge score, touchpoint count, next action. Weekly list to sales.</td><td>Month 1 with DemandSense</td></tr>
+      <tr><td>Influenced Revenue</td><td>Deals where the account had meaningful ad activity before creation. Pipeline, closed-won, and closed-lost in one view.</td><td>Month 2&ndash;3 with CRM sync</td></tr>
+      <tr><td>Hidden Pipeline</td><td>Heavy engagement, no deal record. The list nobody expects. Exportable to outbound or nurture.</td><td>Month 2&ndash;3 with DemandSense</td></tr>
+      <tr><td>What we would NOT promise</td><td>Full econometric MMM is a specialist discipline, not included here. Attribution is directional. Organic improvements from brand lift are observable in Search Console but not directly attributable to paid.</td><td>&mdash;</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="btnrow"><a class="btn primary" data-goto="paths">See the paths forward &rarr;</a><a class="btn ghost" data-goto="ecosystem">Back to ecosystem</a></div>
+</section>
+
+<!-- ============================================================
+     TAB 6: PATHS FORWARD
+     ============================================================ -->
+<section class="view" id="paths">
+  <div class="kicker">Fit Assessment &middot; Honest Read First</div>
+  <h2 class="sec">Where Impactable fits &mdash; <em>and where it doesn't</em>.</h2>
+
+  <!-- FIT ASSESSMENT first -->
+  <div class="card tm" style="margin-bottom:14px">
+    <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--moss);margin-bottom:8px">WHERE WE FIT WELL</div>
+    <div style="font-size:13.5px;color:var(--chalk);line-height:1.7">JS Benefits Group is a strong fit for Impactable's Core tier. The proof infrastructure is already built. The content engine is running. The founder has personal brand authority that Thought Leader Ads can amplify immediately without a production cycle. The ICP is specific enough to build tight LinkedIn targeting. The cold-start status means the first 90 days are about infrastructure and warm pool manufacturing &mdash; exactly what Core is designed for. The recommended path is Core to start, with a defined graduation to Growth at month 3&ndash;4 when warm CPL is below $200 and free analysis submissions are consistent.</div>
+  </div>
+
+  <!-- Matched case studies -->
+  <h3 class="sub">Matched proof &mdash; why these three for JS Benefits Group</h3>
+  <div class="grid3" style="margin:16px 0 28px">
+    <div class="card tl">
+      <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">Life Sciences &middot; Cold Start</div>
+      <div style="font-weight:700;font-size:14px;margin-bottom:6px">Zero paid history to 32 conversions in 90 days</div>
+      <div style="font-size:12.5px;color:var(--chalk)">No warm audience, no prior ads, cold start from scratch. The starting condition exactly matches JSBG's. The proof that the system works from zero.</div>
+    </div>
+    <div class="card tl">
+      <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">HeyReach &middot; Founder-Led, Organic-Heavy</div>
+      <div style="font-weight:700;font-size:14px;margin-bottom:6px">13x ROAS, 20X per CMO on camera</div>
+      <div style="font-size:12.5px;color:var(--chalk)">Strong founder credibility, active organic content engine, prior paid bringing wrong leads. Signal analysis found ~23% of site traffic had strong ICP fit. Directly parallel to JSBG: the organic motion is working; the paid amplification layer is the gap.</div>
+    </div>
+    <div class="card tl">
+      <div class="mono" style="font-size:10px;letter-spacing:.12em;color:var(--canopy-text);margin-bottom:6px">Professional Services &middot; Small Budget</div>
+      <div style="font-weight:700;font-size:14px;margin-bottom:6px">~$70 CPL &middot; 60% form completion</div>
+      <div style="font-size:12.5px;color:var(--chalk)">B2B services firm at comparable scale. Modest budget. High-quality inbound as the north star metric. The efficiency benchmark for what a well-structured Core engagement produces in this category.</div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <h3 class="sub" style="margin-top:8px">The ladder</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0">
+    <div class="prung">
+      <div class="pr-tier">Entry point</div>
+      <div class="pr-name">Core</div>
+      <div class="pr-price">from <strong>$3,000/mo</strong><br>One channel &middot; up to $15k/mo spend</div>
+      <hr>
+      <ul>
+        <li>Full-funnel strategist and execution pod on LinkedIn</li>
+        <li>DemandSense five-source signal stack included</li>
+        <li>Thought Leader Ads, ABM, warm retarget, cold personas built</li>
+        <li>Quarterly Impact Report</li>
+        <li>No new creative production required in month 1</li>
+      </ul>
+      <a href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener" class="pr-cta">Talk to our team</a>
+    </div>
+
+    <div class="prung rec">
+      <div class="pr-badge">Recommended</div>
+      <div class="pr-tier">Recommended start</div>
+      <div class="pr-name">Core &rarr; Growth</div>
+      <div class="pr-price">Start at <strong>$3,000/mo</strong>,<br>graduate to <strong>$4,500/mo</strong> at month 3&ndash;4</div>
+      <hr>
+      <ul>
+        <li>Core LinkedIn build, then Google Search added as the capture layer</li>
+        <li>Web ID at Growth: de-anonymizes companies and people on site</li>
+        <li>Cross-channel reporting: LinkedIn creates, Google captures, one view</li>
+        <li>CRM sync at Growth: influenced revenue visible</li>
+        <li>Graduation trigger: warm CPL below $200 and consistent free analysis submissions</li>
+      </ul>
+      <a href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener" class="pr-cta">Talk to our team &rarr;</a>
+    </div>
+
+    <div class="prung">
+      <div class="pr-tier">When the system is running</div>
+      <div class="pr-name">Scale</div>
+      <div class="pr-price"><strong>$6,000&ndash;$12,000/mo</strong><br>Multi-channel &middot; multi-account</div>
+      <hr>
+      <ul>
+        <li>Dedicated senior strategist and full pod</li>
+        <li>CRM synced with DemandSense, board-grade reporting</li>
+        <li>Full CAPI: conversions feeding back to LinkedIn</li>
+        <li>Quarterly EBR with influenced pipeline in one view</li>
+        <li>The right tier when multi-geo or multi-entity complexity arrives</li>
+      </ul>
+      <a href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener" class="pr-cta">Talk to our team</a>
+    </div>
+  </div>
+
+  <!-- Demand Plan callout -->
+  <div class="callout">
+    <div class="k">The Demand Plan was free &middot; and it stays free</div>
+    <div style="font-size:14px;color:var(--chalk)">This room is Impactable's own analysis, built from public sources. The Demand Plan &mdash; competitor intel, targeting worksheet, and channel read &mdash; is yours to keep with no obligation. The paid work starts when you decide the fit is right. The first call has no pitch and no pressure: we scope the right starting point and tell you exactly what we would build first.</div>
+  </div>
+
+  <!-- Leave-behinds -->
+  <h3 class="sub" style="margin-top:32px">Full diagnostics &mdash; documents from this analysis</h3>
+  <div class="grid3" style="margin:14px 0">
+    <a class="card tl" style="text-decoration:none;cursor:pointer" href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener">
+      <div class="mono" style="font-size:10px;color:var(--canopy-text);letter-spacing:.1em;margin-bottom:8px">DOC 00</div>
+      <b style="font-size:14px">Company Recon</b>
+      <div style="font-size:12.5px;color:var(--chalk);margin-top:6px">The strategic read on JS Benefits Group: model, ICP, market maturity, the opportunity.</div>
+      <div class="mono" style="font-size:11px;color:var(--blue);margin-top:12px">Available on call &rarr;</div>
+    </a>
+    <a class="card tb" style="text-decoration:none;cursor:pointer" data-goto="whitespace">
+      <div class="mono" style="font-size:10px;color:var(--blue);letter-spacing:.1em;margin-bottom:8px">DOC 01</div>
+      <b style="font-size:14px">Competitive White Space</b>
+      <div style="font-size:12.5px;color:var(--chalk);margin-top:6px">4 competitors, saturation map, 5 scored white space gaps.</div>
+      <div class="mono" style="font-size:11px;color:var(--blue);margin-top:12px">Open tab &rarr;</div>
+    </a>
+    <a class="card tt" style="text-decoration:none;cursor:pointer" data-goto="targeting">
+      <div class="mono" style="font-size:10px;color:var(--terracotta);letter-spacing:.1em;margin-bottom:8px">DOC 02</div>
+      <b style="font-size:14px">Audience Targeting Worksheet</b>
+      <div style="font-size:12.5px;color:var(--chalk);margin-top:6px">Warm / ABM / cold tiers, 3 personas, intent signals, 14 keyword themes.</div>
+      <div class="mono" style="font-size:11px;color:var(--blue);margin-top:12px">Open tab &rarr;</div>
+    </a>
+  </div>
+
+  <!-- Big CTA -->
+  <div class="dark-panel" style="background:var(--navy-deep);border:1px solid var(--navy);border-radius:14px;padding:44px 40px;text-align:center;margin-top:32px">
+    <div class="mono" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--canopy-text);margin-bottom:14px">Next step</div>
+    <div style="font-family:'Archivo Black';font-size:clamp(22px,4vw,34px);color:var(--bone);line-height:1.2;margin-bottom:16px">The proof is ready.<br>Let's put it in front of the right people.</div>
+    <div style="font-size:15px;color:var(--chalk);max-width:520px;margin:0 auto 32px;line-height:1.65">Book a 30-minute strategy call. We'll scope the right starting point, walk through the motion, and tell you exactly what we would build first. No pitch, no pressure.</div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="https://landbot.online/v3/H-2201411-ZNNL8EM9RF7C2XAC/index.html" target="_blank" rel="noopener" class="btn primary" style="font-size:14px;padding:14px 28px">Book a strategy call &rarr;</a>
+      <a href="https://impactable.marketing/competitor-intel-report" target="_blank" rel="noopener" class="btn ghost">Start with free Demand Plan</a>
+    </div>
+    <div class="mono" style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:20px">LinkedIn Marketing Partner &middot; CAPI Certified &middot; 20+ LinkedIn-certified insiders &middot; $50M+ B2B spend managed &middot; Thought Leader of the Year 2026</div>
+  </div>
+
+  <div class="foot">
+    <span class="mp">Impactable &middot; LinkedIn Marketing Partner</span>
+    <span class="disc">Built from public sources. No account access used. CPL benchmarks from Impactable's 200+ B2B account dataset. Estimates are indicative, not forecasts. Unknowns are flagged, not filled in. DemandSense and Web ID are Impactable's own software &mdash; disclosed here.</span>
+    <details style="border:none;width:100%"><summary style="padding:8px 0;font-size:11px;color:var(--muted)">Show full notes and limitations</summary><div style="font-size:12px;color:var(--muted);padding:12px 0;line-height:1.6">All findings are drawn from publicly available sources including company websites, LinkedIn, press releases, chamber of commerce listings, and third-party business intelligence tools (Prospeo, PitchBook, ZoomInfo). No access to JS Benefits Group's ad accounts, CRM, or internal data was used. Audience size estimates are indicative ranges based on LinkedIn targeting doctrine; actual sizes must be verified in Campaign Manager after applying filters. CPL benchmarks are from Impactable's 200+ B2B SaaS account dataset and may vary by industry, geography, and budget level. Case study figures from JS Benefits Group's own published case studies are taken at face value; Impactable has not independently verified the underlying claims. Competitor assessments are based solely on publicly visible marketing materials and do not reflect any non-public information about those firms. DemandSense is Impactable's own software product; its capabilities are described accurately, but prospective clients should evaluate it independently.</div></details>
+  </div>
+</section>
+
+</div><!-- end .wrap -->
+
+<script>
+(function(){
+  var root=document.documentElement, tbtn=document.getElementById('themeBtn');
+  var saved=null; try{saved=localStorage.getItem('imp_theme');}catch(e){}
+  if(saved){root.setAttribute('data-theme',saved);}
+  function icon(){tbtn.innerHTML=root.getAttribute('data-theme')==='light'?'&#9788;':'&#9790;';}
+  icon();
+  tbtn.addEventListener('click',function(){
+    var t=root.getAttribute('data-theme')==='light'?'dark':'light';
+    root.setAttribute('data-theme',t);
+    try{localStorage.setItem('imp_theme',t);}catch(e){}
+    icon();
+  });
+  function show(v){
+    var target=document.getElementById(v);
+    if(!target||!target.classList.contains('view')){return;}
+    document.querySelectorAll('.view').forEach(function(s){s.classList.toggle('active',s.id===v);});
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.v===v);});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){show(t.dataset.v);});});
+  document.querySelectorAll('[data-goto]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(a.tagName==='A'&&!a.dataset.goto){return;}
+      e.preventDefault();show(a.dataset.goto);
+    });
+  });
+  window.addEventListener('hashchange',function(){
+    var h=location.hash.replace('#','');
+    if(h&&document.getElementById(h)){show(h);}
+  });
+  var initHash=location.hash.replace('#','');
+  if(initHash&&document.getElementById(initHash)){show(initHash);}
+})();
+</script>
+</body>
+</html>
